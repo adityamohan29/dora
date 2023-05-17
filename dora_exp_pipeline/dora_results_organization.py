@@ -313,18 +313,14 @@ class ReshapeRaster(ResultsOrganization):
             # TODO: figure out correct number of patches
             if top_n != len(data_ids):
                 raise RuntimeError('Cannot use top_n with ReshapeRaster')
-            scores = np.ones([height, width]) * np.NINF
-            for idx, score in zip(data_ids, dts_scores):
-                # get the patch top left coordinates
+            scores = np.zeros([height, width])
+            for ex, idx in enumerate(data_ids):
+                # get the patch center coordinates
                 i, j = idx.split('-')
-                i, j = int(i), int(j)
-
-                # Select the slice in max_scores corresponding to the current
-                # patch
-                curr_slice = scores[i:i+patch_size, j:j+patch_size]
-                curr_slice[curr_slice < score] = score
-
-            scores[scores == np.NINF] = np.nan
+                i = int(i)
+                j = int(j)
+                # fill in the score for that index
+                scores[i, j] = dts_scores[ex]
         else:
             raise RuntimeError("data_format must be 'pixels' or 'patches'")
 

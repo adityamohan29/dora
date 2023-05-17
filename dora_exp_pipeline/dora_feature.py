@@ -106,7 +106,8 @@ class FlattenedPixelValuesExtractor(FeatureExtractor):
         if 'height' in kwargs.keys():
             height = int(kwargs['height'])
             do_resizing = True
-
+        
+        print("Data cube shape: ",data_cube[0].shape)
         # Get data dimension from the first item in the data cube
         if len(data_cube[0].shape) == 2:  # grayscale
             rows, cols = data_cube[0].shape
@@ -137,7 +138,9 @@ class FlattenedPixelValuesExtractor(FeatureExtractor):
             scaled = np.subtract(ret_features, min_val) / (max_val - min_val)
             ret_features = scaled
 
-        return ret_features
+        dc_arr = np.array(data_cube)
+        dc_rshp = np.reshape(dc_arr,[dc_arr.shape[0],dc_arr.shape[1]*dc_arr.shape[2]*dc_arr.shape[3]])
+        return dc_rshp
 
 
 # Register flattened pixel values extractor into the feature extractor pool
