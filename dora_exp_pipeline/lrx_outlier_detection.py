@@ -91,12 +91,12 @@ def lrx(patch, w_in):
     if len(cov.shape) == 0:
         cov = np.array([[cov]])
 
-    try:
-        cov = np.linalg.inv(cov)
-    except np.linalg.LinAlgError:
-        # Duplicate columns will result in singular matrix
-        # Return score of 0 in this case
-        return 0
+    # try:
+    #     cov = np.linalg.inv(cov)
+    # except np.linalg.LinAlgError:
+    #     # Duplicate columns will result in singular matrix
+    #     # Return score of 0 in this case
+    #     return 0
     sub = patch[c, c] - mu
     rx_score = np.dot(np.dot(sub, cov), sub.T)
     return rx_score
